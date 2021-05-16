@@ -20,10 +20,11 @@ def scroll_to_bottom(driver):
     while True:
         current = offset
         driver.execute_script(f"window.scrollTo({offset},{offset+1000})")
-        sleep(1)
+        sleep(.5)
         offset = driver.execute_script("return window.pageYOffset")
         if offset == current:
             break
+    sleep(1)
     print("scrolled to the bottom")
     
 
@@ -46,8 +47,8 @@ def get_posts(driver):
 
 def scraper(driver,post_links):
 
-    if os.path.exists(f"./{config('FOLDER')}"):
-        os.system(f"rm {config('FOLDER')}")
+    if os.path.exists(f"{config('FOLDER')}"):
+        os.system(f"rm -rf {config('FOLDER')}")
 
     os.mkdir(config('FOLDER'))
     os.chdir(config('FOLDER'))
