@@ -2,7 +2,7 @@
 
 ### **Purpose**
 
-You ever saw a youtube channel that had some *quality* posts that gave you the urge to archive them, *ahem*Kamitsurugi*ahem*?
+You ever saw a youtube channel that had some *quality* posts that gave you the urge to archive them, *\*ahem\** Kamitsurugi *\*ahem\**?
 No? Welp, if you ever do, you can use my crappy, unoptimized tool. No worries.
 
 ### **Usage**
