@@ -35,11 +35,14 @@ def get_posts(driver):
     post_links=[]
 
     for e in posts:
-        e = e.find_element_by_id("content-attachment")
-        e = e.find_element_by_tag_name('ytd-backstage-image-renderer')
-        e = e.find_element_by_tag_name('a')
+        try:
+            e = e.find_element_by_id("content-attachment")
+            e = e.find_element_by_tag_name('ytd-backstage-image-renderer')
+            e = e.find_element_by_tag_name('a')
 
-        post_links.append(e.get_attribute("href"))
+            post_links.append(e.get_attribute("href"))
+        except:
+            pass
 
     print("Got the links of posts")
     return post_links

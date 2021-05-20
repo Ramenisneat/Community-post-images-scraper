@@ -7,7 +7,7 @@ No? Welp, if you ever do, you can use my crappy, unoptimized tool. No worries.
 
 ### **Usage**
 
-You will need to have to get selenium for python and all other needed libraries should be default.
+You will need to have to get selenium for python and the chromium webdriver. Chromedriver is usaullys stored in `/usr/lib/chromium/chromedriver all other needed libraries should be default.
 
 Make a `.env` that follows the provided `.env.example`. `CHANNEL` is obviously the channel name and `FOLDER` is the folder the script needs to create and use; can be expressed as a full path.
 
