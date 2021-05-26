@@ -15,3 +15,5 @@ The `scraper.py` file uses argparse and therefore has an `-h` help option.
 There's only 2 flags available:
 - `-s` : This one scrapes all the available community posts from the specified channel. Stores the available posts in `urls.txt` and images in `FOLDER`.
 - `-u` : Since Youtube limits how far back you can view the posts, better run the update utility time to time so the posts are up to date. The settings again taken from the `.env`. I use a simple CRON job that timely runs this.
+
+**NOTE: Posts without images are ignored**
