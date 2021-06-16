@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from selenium import webdriver
 from time import sleep
 import os
@@ -68,6 +70,7 @@ def scraper(driver,post_links):
             i = driver.find_element_by_xpath("/html/body/ytd-app/div/ytd-page-manager/ytd-browse/ytd-two-column-browse-results-renderer/div[1]/ytd-section-list-renderer/div[2]/ytd-backstage-items/ytd-item-section-renderer/div[3]/ytd-backstage-post-thread-renderer/div[1]/ytd-backstage-post-renderer/div[1]/div[2]/div[2]/ytd-backstage-image-renderer/div/yt-img-shadow/img")
             link = i.get_attribute("src")
             os.system(f"curl {link} > image{counter}.png")
+            sleep(1)
             counter+=1
             file.write(url+"\n")
 
@@ -85,7 +88,7 @@ def updater(driver, post_links):
         lines = f.read().splitlines()
     print(num)
     with open("urls.txt",mode="a") as file:
-        for url in post_links[:11]:
+        for url in post_links[::-1]:
             if url == None: continue
             if url in lines:
                 print(f"already got {url}")
@@ -93,7 +96,11 @@ def updater(driver, post_links):
                 driver.get(url=url)
                 src = (driver.find_element_by_xpath("/html/body/ytd-app/div/ytd-page-manager/ytd-browse/ytd-two-column-browse-results-renderer/div[1]/ytd-section-list-renderer/div[2]/ytd-backstage-items/ytd-item-section-renderer/div[3]/ytd-backstage-post-thread-renderer/div[1]/ytd-backstage-post-renderer/div[1]/div[2]/div[2]/ytd-backstage-image-renderer/div/yt-img-shadow/img")).get_attribute("src")
                 print("making "+url)
-                os.system(f"curl {src} > image{num+1}.png")
+                num = num +1
+                os.system(f"curl {src} > image{num}.png")
+    
+                sleep(2)
+                print("finished this one")
                 file.write(url+"\n")
 
 
@@ -112,8 +119,8 @@ def main():
         scraper(driver,post_links)
 
     elif args.u:
-        driver.execute_script(f"window.scrollTo(0,500)")
-        sleep(2)
+        driver.execute_script(f"window.scrollTo(0,1000)")
+        sleep(1)
         post_links = get_posts(driver)
         updater(driver,post_links)
     
