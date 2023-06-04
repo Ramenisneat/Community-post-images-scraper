@@ -11,7 +11,7 @@ import argparse
 
 def get_channel(CHANNEL):
     op = webdriver.ChromeOptions()
-    op.add_argument("headless")
+    # op.add_argument("headless")
     driver = webdriver.Chrome(options=op) 
     driver.get(url= f"https://www.youtube.com/@{CHANNEL}/community")
     sleep(1)
@@ -23,18 +23,21 @@ def scroll_to_bottom(driver):
     while True:
         current = offset
         driver.execute_script(f"window.scrollTo({offset},{offset+1000})")
-        sleep(.5)
+        sleep(1)
         offset = driver.execute_script("return window.pageYOffset")
         if offset == current:
             break
     print("scrolled to the bottom")
     
 def get_posts(driver):
-    sleep(1)
+    sleep(2)
     posts = driver.find_elements(By.XPATH, "//div[@id='contents']//div[@id='content-attachment']//a[1]")
+    # print(posts)
     post_links=[]
     for e in posts:
         link = e.get_attribute("href")
+        if link is None or e is None:
+            continue
         if "post/" in link and link not in post_links:
             post_links.append(link)
     print("Got the links of posts")
@@ -52,8 +55,11 @@ def scraper(driver,post_links,FOLDER):
             print("making " + url)
             driver.get(url=url)
             sleep(1)
-            srcs = [i.get_attribute("src") for i in driver.find_elements(By.XPATH, "//div[@id='image-container']//img")]
             
+            while (driver.find_element_by_id("right-arrow").get_attribute("hidden") == None):
+                driver.find_element_by_id("right-arrow").click()
+                
+            srcs = [i.get_attribute("src") for i in driver.find_elements(By.XPATH, "//div[@id='image-container']//img")]
             for src in srcs:
                 if src == None:
                     print(f"ERROR on {src}")
@@ -78,6 +84,9 @@ def updater(driver, post_links, FOLDER):
                 print("making "+url)
                 driver.get(url=url)
                 sleep(1)
+
+                while (driver.find_element_by_id("right-arrow").get_attribute("hidden") == None):
+                    driver.find_element_by_id("right-arrow").click()
 
                 srcs = [i.get_attribute("src") for i in driver.find_elements(By.XPATH, "//div[@id='image-container']//img")]
                 for src in srcs:

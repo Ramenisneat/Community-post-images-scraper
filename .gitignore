@@ -1,7 +1,8 @@
 geckodriver.log
 kamitsurugi_images
-new_images
+.vscode
+*/
 .env
-image0.png
-updater.py
-test_images
+./p/
+*.png
+*.jpg
