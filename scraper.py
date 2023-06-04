@@ -11,7 +11,7 @@ import argparse
 
 def get_channel(CHANNEL):
     op = webdriver.ChromeOptions()
-    # op.add_argument("headless")
+    op.add_argument("headless")
     driver = webdriver.Chrome(options=op) 
     driver.get(url= f"https://www.youtube.com/@{CHANNEL}/community")
     sleep(1)
@@ -23,14 +23,14 @@ def scroll_to_bottom(driver):
     while True:
         current = offset
         driver.execute_script(f"window.scrollTo({offset},{offset+1000})")
-        sleep(1)
+        sleep(.5)
         offset = driver.execute_script("return window.pageYOffset")
         if offset == current:
             break
     print("scrolled to the bottom")
     
 def get_posts(driver):
-    sleep(2)
+    sleep(1)
     posts = driver.find_elements(By.XPATH, "//div[@id='contents']//div[@id='content-attachment']//a[1]")
     # print(posts)
     post_links=[]
@@ -58,7 +58,7 @@ def scraper(driver,post_links,FOLDER):
             
             while (driver.find_element_by_id("right-arrow").get_attribute("hidden") == None):
                 driver.find_element_by_id("right-arrow").click()
-                
+
             srcs = [i.get_attribute("src") for i in driver.find_elements(By.XPATH, "//div[@id='image-container']//img")]
             for src in srcs:
                 if src == None:
