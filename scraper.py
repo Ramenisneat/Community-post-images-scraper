@@ -27,29 +27,22 @@ def scroll_to_bottom(driver):
         offset = driver.execute_script("return window.pageYOffset")
         if offset == current:
             break
-
-    sleep(1)
     print("scrolled to the bottom")
     
-
 def get_posts(driver):
+    sleep(1)
     posts = driver.find_elements(By.XPATH, "//div[@id='contents']//div[@id='content-attachment']//a[1]")
     post_links=[]
     for e in posts:
         link = e.get_attribute("href")
         if "post/" in link and link not in post_links:
             post_links.append(link)
-
     print("Got the links of posts")
-    # print(post_links)
     return post_links
 
-
 def scraper(driver,post_links,FOLDER):
-
     if os.path.exists(f"{FOLDER}"):
         os.system(f"rm -rf {FOLDER}")
-
     os.mkdir(FOLDER)
     os.chdir(FOLDER)
     
@@ -59,15 +52,14 @@ def scraper(driver,post_links,FOLDER):
             print("making " + url)
             driver.get(url=url)
             sleep(1)
-            print("making "+url)
-
             srcs = [i.get_attribute("src") for i in driver.find_elements(By.XPATH, "//div[@id='image-container']//img")]
             
             for src in srcs:
                 if src == None:
-                        continue
-                os.system(f"curl {src} > image{count}.png")
-                sleep(1)
+                    print(f"ERROR on {src}")
+                    continue
+                with open(f"image{count}.png", "w") as out:
+                    subprocess.run(f"curl {src}", stdout=out, shell=True)
                 count+=1
                 print("finished this one")
                 file.write(url+"\n")
@@ -75,33 +67,26 @@ def scraper(driver,post_links,FOLDER):
 
 def updater(driver, post_links, FOLDER):
     print(datetime.now())
-    sleep(2)
-
     os.chdir(FOLDER)
-  
-    count = int(subprocess.check_output("cat urls.txt | wc -l", shell=True)) 
-    lines = []
-    with open("urls.txt",mode="r") as file:
+    with open("urls.txt",mode="r+") as file:
         lines = file.read().splitlines()
-        print(count)
-    
-    with open("urls.txt",mode="a") as file:
+        count = len(lines)
         for url in post_links[::-1]:
             if url in lines:
                 print(f"already got {url}")
             else:
+                print("making "+url)
                 driver.get(url=url)
                 sleep(1)
-                print("making "+url)
 
                 srcs = [i.get_attribute("src") for i in driver.find_elements(By.XPATH, "//div[@id='image-container']//img")]
-                
                 for src in srcs:
                     if src == None:
-                            continue
-                    os.system(f"curl {src} > image{count}.png")
-                    sleep(1)
+                        print(f"ERROR on {src}")
+                        continue
                     count+=1
+                    with open(f"image{count}.png", "w") as out:
+                        subprocess.run(f"curl {src}", stdout=out, shell=True)
                     print("finished this one")
                     file.write(url+"\n")
 
